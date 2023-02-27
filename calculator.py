@@ -99,7 +99,7 @@ class Calculator:
                 fg=LABEL_COLOR,
                 font=DEFAULT_FONT_STYLE,
                 borderwidth=0,
-                command= lambda x = symbol: self.append_operator(x)
+                command= lambda x = operator: self.append_operator(x)
             )
             button.grid(row=i, column=4, sticky=tk.NSEW)
             i += 1
@@ -159,7 +159,10 @@ class Calculator:
         self.create_sqrt_button()
     
     def update_total_label(self):
-        self.total_expr_label.config(text=self.total_expression)
+        expression = self.total_expression
+        for operator, symbol in self.operations.items():
+            expression = expression.replace(operator, f" {symbol} ")
+        self.total_expr_label.config(text=expression)
     
     def update_current_label(self):
         self.current_expr_label.config(text=self.current_expression)
@@ -184,9 +187,9 @@ class Calculator:
     def evaluate(self):
         self.total_expression += self.current_expression
         self.update_total_label()
-        self.total_expression = ''
         self.current_expression = str(eval(self.total_expression))
         self.update_current_label()
+        self.total_expression = ''
     
     def square(self):
         self.current_expression = str(eval(f"{self.current_expression}**2"))
