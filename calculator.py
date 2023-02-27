@@ -165,7 +165,7 @@ class Calculator:
         self.total_expr_label.config(text=expression)
     
     def update_current_label(self):
-        self.current_expr_label.config(text=self.current_expression)
+        self.current_expr_label.config(text=self.current_expression[:11])
 
     def add_to_current_expression(self, value):
         self.current_expression += str(value)
@@ -187,9 +187,13 @@ class Calculator:
     def evaluate(self):
         self.total_expression += self.current_expression
         self.update_total_label()
-        self.current_expression = str(eval(self.total_expression))
-        self.update_current_label()
-        self.total_expression = ''
+        try:
+            self.current_expression = str(eval(self.total_expression))
+            self.total_expression = ''
+        except Exception as e:
+            self.current_expression = 'Error'
+        finally:
+            self.update_current_label()
     
     def square(self):
         self.current_expression = str(eval(f"{self.current_expression}**2"))
